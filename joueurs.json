@@ -1,0 +1,23 @@
+[
+    {
+        "id":1,
+        "idEquipe":1,
+        "nom":"achraf hakimi",
+        "numero": 2,
+        "poste":"defence"
+    },
+    {
+        "id":2,
+        "idEquipe":2,
+        "nom":"brahim diaz",
+        "numero": 21,
+        "poste":"attaque"
+    },
+    {
+        "id":3,
+        "idEquipe":2,
+        "nom":"modric",
+        "numero": 10,
+        "poste":"milieu"
+    }
+]
