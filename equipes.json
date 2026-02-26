@@ -1,0 +1,22 @@
+[
+    {
+        "id":1,
+        "nom":"PSG",
+        "country":"france"
+    },
+    {
+        "id":2,
+        "nom":"Real Madrid",
+        "country":"Espagne"
+    },
+    {
+        "id":3,
+        "nom":"Barcelona",
+        "country":"Espagne"
+    },
+    {
+        "id":4,
+        "nom":"Man City",
+        "country":"England"
+    }
+]
