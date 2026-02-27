@@ -105,6 +105,86 @@ app.get('/', (req, res) => {
         });
 
 // ====================================================================================
+        //    Mise à jour de la route POST /joueurs (Questions 5 et 6)
+// ====================================================================================
+
+        // POST - Ajouter un nouveau joueur (Avec Validations)
+        app.post('/joueurs', (req, res) => {
+            const { id, idEquipe, nom, numero, poste } = req.body;
+
+            // Règle 5a : Le nom est obligatoire
+            if (!nom) {
+                return res.status(400).json({ erreur: "Le nom du joueur est obligatoire." });
+            }
+
+            // Règle 6 : L'équipe doit exister
+            const equipeExiste = equipes.find(e => e.id === idEquipe);
+            if (!equipeExiste) {
+                return res.status(404).json({ erreur: "Impossible d'ajouter le joueur : l'équipe spécifiée n'existe pas." });
+            }
+
+            // Règle 5b : Le numéro doit être unique dans la même équipe
+            const numeroPris = joueurs.find(j => j.idEquipe === idEquipe && j.numero === numero);
+            if (numeroPris) {
+                return res.status(400).json({ erreur: `Le numéro ${numero} est déjà pris dans cette équipe.` });
+            }
+
+            // Si toutes les validations passent, on ajoute le joueur
+            const nouveauJoueur = { id, idEquipe, nom, numero, poste };
+            joueurs.push(nouveauJoueur);
+            
+            // 201 = Created (C'est le code HTTP standard pour une création réussie)
+            res.status(201).json(joueurs);
+        });
+
+// ====================================================================================
+        //    Mise à jour de la route DELETE /equipes/:id (Question 7)
+// ====================================================================================
+        // DELETE - Supprimer une équipe avec vérification
+        app.delete('/equipes/:id', (req, res) => {
+            const idEquipe = parseInt(req.params.id);
+
+            // Règle 7 : Vérifier si l'équipe a encore des joueurs
+            // La méthode .some() renvoie "true" dès qu'elle trouve au moins un joueur correspondant
+            const contientJoueurs = joueurs.some(j => j.idEquipe === idEquipe);
+            
+            if (contientJoueurs) {
+                return res.status(400).json({ 
+                    erreur: "Suppression refusée : cette équipe contient encore des joueurs." 
+                });
+            }
+
+            // Si l'équipe est vide, on procède à la suppression
+            const equipe = equipes.find(e => e.id === idEquipe);
+            if (equipe) {
+                equipes.splice(equipes.indexOf(equipe), 1);
+                res.status(200).json({ message: "Équipe supprimée avec succès", equipes });
+            } else {
+                res.status(404).json({ erreur: "Équipe non trouvée." });
+            }
+        });
+
+// ====================================================================================
+        //    Nouvelle route : Nombre total de joueurs par équipe (Question 8)
+// ====================================================================================
+            // GET - Retourner le nombre total de joueurs par équipe (Question 8)
+        app.get('/equipes/stats/joueurs', (req, res) => {
+            // On crée un nouveau tableau avec les statistiques
+            const statistiques = equipes.map(equipe => {
+                // On filtre les joueurs pour ne garder que ceux de l'équipe actuelle
+                const joueursDeLequipe = joueurs.filter(j => j.idEquipe === equipe.id);
+                
+                // On retourne un objet formaté
+                return {
+                    idEquipe: equipe.id,
+                    nomEquipe: equipe.name,
+                    nombreDeJoueurs: joueursDeLequipe.length
+                };
+            });
+
+            res.status(200).json(statistiques);
+        });
+// ====================================================================================
 // EXPORTATION DE L'APPLICATION (Très important)
 // ====================================================================================
 module.exports = app;
