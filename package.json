@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/yasu19-dev/TPs_CLOUD_NATIVE#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mysql2": "^3.18.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
